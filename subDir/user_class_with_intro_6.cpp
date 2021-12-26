@@ -68,7 +68,7 @@ User::User(string username, string password){
 	this -> complete_status = 0;
 	this -> account_status = 1; // status normal 
 	this -> current_lv = 1;
-	this -> wish = "0";
+	this -> wish = "µL";
 	this -> wish_status = 0;
 	this -> banned_status = 0;
 	this -> banned_time = 0;
@@ -406,16 +406,16 @@ void Login(User** allUser){
 	} 
 	
 	if(user_ind != -1){
-		if(allUser[user_ind] -> banned_status == true && (allUser[user_ind] -> banned_time - time(nullptr)) < 300){
-		cout << "You can't Login right now!" << endl;
-		cout << "directed to login page!" << endl;
-		welcome(allUser);
-		}
-		else{
+		// if(allUser[user_ind] -> banned_status == true && (allUser[user_ind] -> banned_time - time(nullptr)) < 300){
+		// cout << "You can't Login right now!" << endl;
+		// cout << "directed to login page!" << endl;
+		// welcome(allUser);
+		// }
+		// else{
 			cout << "Welcome!" << endl;
-			allUser[user_ind] -> banned_status = false;
+			//allUser[user_ind] -> banned_status = false;
 			internal_welcome(allUser, user_ind);
-		}	
+		// }	
 	}
 	else{
 		// if the function doesn;t return, it means that the user might not registered or typed the wrong account/password
@@ -437,8 +437,22 @@ void internal_welcome(User** allUser, int user_ind){
 	cout << "[1] Start Game   [2] Log Out  [3] See player information";
 	int flag;
 	cin >> flag;
-	if(flag == 1) // char flag != int 1 !!
-		gameState(allUser, user_ind);
+	if(flag == 1){ //char flag != int 1 !!
+		// write all the situation where a person can't play the game here
+		if(allUser[user_ind] -> get_banned_status() == true && (allUser[user_ind] -> get_banned_time() - time(nullptr)) < 300){
+			cout << "You can't play the game because you are temporarily banned!" << endl;
+			cout << "back to internal welcome page" << endl;
+			internal_welcome(allUser, user_ind);
+		}
+		else if(allUser[user_ind] -> get_complete_status() == true){
+			cout << "You can't play the game because you already passed the game!" << endl;
+			cout << "back to internal welcome page";
+			internal_welcome(allUser, user_ind);
+		}
+		else{
+			gameState(allUser, user_ind);
+		}
+	} 
 	else if(flag == 2) 
 		welcome(allUser);
 	else if(flag == 3)
