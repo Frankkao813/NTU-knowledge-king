@@ -1,3 +1,3 @@
-testFrank password 0 0 0 5 1 1 킠 0 0 0
+testFrank password 0 0 0 4 1 1 킠 0 0 0
 testBetty password 0 0 0 4 1 1 킠 0 0 0
 testPiggg password 0 0 0 5 1 1 킠 0 0 0
