@@ -29,7 +29,7 @@ class User{
 		// bool banned_status; //  wait for 10 minutes - not implemented yet
 		string wish; // the wish that user makes after clearing the game
 		bool wish_status; // whether the wish is private
-		bool banned_status;
+		bool banned_status; 
 		int banned_time;
 	public:
 		User(string name, string pass);
@@ -38,10 +38,12 @@ class User{
 		void add_total_ques_answered(); // increment by 1 by default
 		bool increment_lv(); // one question correct, then the user can increment one level 
 		void decrement_lv(); // one question wrong, then the user will decrement one level
-		bool deduct_life();
-		void set_banned_time(int time_in_sec){this -> banned_time = time_in_sec; } // setter
-		void set_banned_status(bool status){this -> banned_status = status; } // setter
+		bool deduct_life(); // one question wrong, then then user will decrement one life
+		void set_banned_time(int time_in_sec){this -> banned_time = time_in_sec; } // setter // record the time that the user start to be banned!
+		void set_banned_status(bool status){this -> banned_status = status; } // setter // when recording the banned time, set the banned_status to be true;
 		void set_complete_status(bool comp_status){this -> complete_status = comp_status;} // setter
+		void set_wish(string add_wish){this -> wish = add_wish;} // set the wishes of the user if he/she complete the game
+		void refill_life(); // life refill to 5 after a game 
 		
 		int get_time_used(){return this -> time_used;} // getter
 		int get_total_ques_answered(){return this -> total_ques_answered;} // getter 
@@ -99,6 +101,9 @@ bool User::deduct_life(){
 	else
 		return false;
 		
+}
+void User::refill_life(){
+	this -> life = 5;
 }
 
 void User::add_time_used(int time_in_question){
@@ -235,6 +240,7 @@ void player_info(User** allUser, int user_ind);
 void intro(User** allUser);
 void story(User** allUser);
 void ranking(User** allUser);
+void sortSuccessUser(User** success_user, int success_num);
 void gameState(User** allUser, int user_ind);
 
 
@@ -406,12 +412,7 @@ void Login(User** allUser){
 	} 
 	
 	if(user_ind != -1){
-		// if(allUser[user_ind] -> banned_status == true && (allUser[user_ind] -> banned_time - time(nullptr)) < 300){
-		// cout << "You can't Login right now!" << endl;
-		// cout << "directed to login page!" << endl;
-		// welcome(allUser);
-		// }
-		// else{
+
 			cout << "Welcome!" << endl;
 			//allUser[user_ind] -> banned_status = false;
 			internal_welcome(allUser, user_ind);
@@ -450,6 +451,7 @@ void internal_welcome(User** allUser, int user_ind){
 			internal_welcome(allUser, user_ind);
 		}
 		else{
+			allUser[user_ind] -> set_banned_status(false); 
 			gameState(allUser, user_ind);
 		}
 	} 
@@ -549,6 +551,10 @@ void ranking(User** allUser)
 		}
 	}
 
+	// starting to sort the pointer
+	if(success_num >= 2)
+		sortSuccessUser(success_user, success_num); 
+
 	cout << "username" << "     " << "wishes" << "      " << "used time"<< "     " << "answered question" << endl;
 	if(success_num == 0){
 		cout << "No one completed the game yet... Be the first person to finish the game!" << endl;
@@ -569,7 +575,22 @@ void ranking(User** allUser)
 		ranking(allUser);
 }
 
+void sortSuccessUser(User** success_user, int success_num){
+	
+	User* tmp;
+	// implement bubble sort
+	for(int i = success_num - 1; i > 0; i--){
+    	for(int j = 0; j <= i-1; j++){
+        	if( success_user[j]  -> get_total_ques_answered() > success_user[j+1] -> get_total_ques_answered()){
+			// swap pointer
+           		tmp = success_user[j];
+            	success_user[j] = success_user[j+1];
+            	success_user[j+1] = tmp;
+        }
+    }
+}
 
+}
 void gameState(User** allUser, int user_ind){
 	
 	Question ques_obj;
