@@ -11,6 +11,7 @@ const int MAX_ACC_PASS_LEN = 11; // the maximum account and password length a pe
 int curr_active_user = 0; // record the number of active user 
 const int MAX_USER_NUM = 100;
 const int NUM_OPTION = 4;
+const int LEVEL = 7;
 
 class User{
 	friend void fileInput(string dir, User** allUser);
@@ -26,7 +27,6 @@ class User{
 		string password;
 		bool complete_status; // state whether the user completed the game 
 		bool account_status; // check if the account is set up properly
-		// bool banned_status; //  wait for 10 minutes - not implemented yet
 		string wish; // the wish that user makes after clearing the game
 		bool wish_status; // whether the wish is private
 		bool banned_status; 
@@ -36,13 +36,14 @@ class User{
 		User(string username, string password, bool complete_status, int total_ques_answered, int time_used, int life, int current_lv, bool account_status, string wish, bool wish_status, bool banned_status, int banned_time);
 		void add_time_used(int time_in_question);
 		void add_total_ques_answered(); // increment by 1 by default
-		bool increment_lv(); // one question correct, then the user can increment one level 
+		void increment_lv(); // one question correct, then the user can increment one level 
 		void decrement_lv(); // one question wrong, then the user will decrement one level
-		bool deduct_life(); // one question wrong, then then user will decrement one life
+		void deduct_life(); // one question wrong, then then user will decrement one life
 		void set_banned_time(int time_in_sec){this -> banned_time = time_in_sec; } // setter // record the time that the user start to be banned!
 		void set_banned_status(bool status){this -> banned_status = status; } // setter // when recording the banned time, set the banned_status to be true;
 		void set_complete_status(bool comp_status){this -> complete_status = comp_status;} // setter
 		void set_wish(string add_wish){this -> wish = add_wish;} // set the wishes of the user if he/she complete the game
+		void set_wish_status(bool wishStatus){this -> wish_status = wishStatus;}
 		void refill_life(); // life refill to 5 after a game 
 		
 		int get_time_used(){return this -> time_used;} // getter
@@ -93,13 +94,13 @@ User::User(string username, string password, bool complete_status, int total_que
 	
 }
 
-bool User::deduct_life(){
+void User::deduct_life(){
 	this -> life -= 1;
 	// check if the life is greater than 0
-	if(this -> life >= 0)
-		return true;
-	else
-		return false;
+	// if(this -> life >= 0)
+	// 	return true;
+	// else
+	// 	return false;
 		
 }
 void User::refill_life(){
@@ -110,13 +111,13 @@ void User::add_time_used(int time_in_question){
 	this -> time_used += time_in_question;
 }
 
-bool User::increment_lv(){
+void User::increment_lv(){
 	this -> current_lv += 1;
-	if(this -> current_lv == 8){
-		return true;
-	}
-	else
-		return false;
+	// if(this -> current_lv == 8){
+	// 	return true;
+	// }
+	// else
+	// 	return false;
 	
 }
 
@@ -242,6 +243,7 @@ void story(User** allUser);
 void ranking(User** allUser);
 void sortSuccessUser(User** success_user, int success_num);
 void gameState(User** allUser, int user_ind);
+void setUserWish(User** allUser, int user_ind);
 
 
 int main(){	
@@ -545,7 +547,7 @@ void ranking(User** allUser)
 	User** success_user = new User*[MAX_USER_NUM];
 	// currently, I define the wish status to be the complete criteria
 	for(int i = 0 ; i < curr_active_user; i++){
-		if(allUser[i] -> get_wish_status() == true){
+		if(allUser[i] -> get_complete_status() == true){
 			success_user[success_num] = allUser[i]; // storing the pointer
 			success_num++;
 		}
@@ -591,37 +593,131 @@ void sortSuccessUser(User** success_user, int success_num){
 }
 
 }
-void gameState(User** allUser, int user_ind){
-	
+
+
+void gameState(User** allUser, int user_ind)
+{
 	Question ques_obj;
-	string userInput; 
-	bool correctness = false;
-	
-	for(int i = 0; i < 4; i++){
-		//to do:  the program to pick the question randomly...probably a function can help
+	for(int i = 0 ; i < LEVEL ; i++)
+	{	
 		
-		string question_title = ques_obj.get_ques(i);
-		cout << question_title;
-		cout << endl;
-		for(int j = 0;  j < NUM_OPTION; j++)
-			cout << "["<<  static_cast<char>(65 + j) <<  "] "  << ques_obj.get_option(i, j) << " ";
-		cout << endl;
-		cout << "Please input your answer: ";
-		cin >> userInput;
-		correctness = ques_obj.check_answer(i, userInput);
-		if(correctness == true)
-			cout << "Congratulations!";
-		else{
-			cout << "Oops! You get the wrong answer.";
-			allUser[user_ind] -> deduct_life();
-			cout << "the current life is..." << allUser[user_ind] -> get_life() << endl;
+		string player_answer = "E";
+		srand( time(NULL) );
+		
+		int pick_question = rand() % 24;
+		if(allUser[user_ind] -> get_current_lv() == 1)
+		{	
+			pick_question += 0; 
 		}
-			
+		if(allUser[user_ind] -> get_current_lv() == 2)
+		{
+			pick_question += 24;
+		}
+		if(allUser[user_ind] -> get_current_lv() == 3)
+		{
+			pick_question += 48;
+		}
+		if(allUser[user_ind] -> get_current_lv() == 4)
+		{
+			pick_question += 72;
+		}
+		if(allUser[user_ind] -> get_current_lv() == 5)
+		{
+			pick_question += 96;
+		}
+		if(allUser[user_ind] -> get_current_lv() == 6)
+		{
+			pick_question += 120;
+		} 
+		if(allUser[user_ind] -> get_current_lv() == 7)
+		{
+			pick_question += 144;
+		}
+		else{
+			cout << "You have achieved the level!" << endl;
+			break;
+		}
 		
+		cout << ques_obj.get_ques(pick_question) << endl;
+		cout << "A. " << ques_obj.get_option(pick_question, 0) << endl; 
+		cout << "B. " << ques_obj.get_option(pick_question, 1) << endl; 
+		cout << "C. " << ques_obj.get_option(pick_question, 2) << endl; 
+		cout << "D. " << ques_obj.get_option(pick_question, 3) << endl;
+		cout << "玩家答案 : ";
+		cin >> player_answer;
+		cout << "Your answer is " << player_answer << endl;
+
+		// check answer
+		if(ques_obj.check_answer(pick_question, player_answer))
+		{
+			cout << "恭喜答對了!" << endl;
+			allUser[user_ind] -> increment_lv();
+		}
+		else
+		{
+			cout << "喔不!答錯了..." << endl; 
+			allUser[user_ind] -> deduct_life();
+			cout << "生命值 : " << allUser[user_ind] -> get_life() << endl;
+			allUser[user_ind] -> decrement_lv();
+			
+		}
+		
+		allUser[user_ind] -> add_total_ques_answered();
 		cout << endl;
 		cout << endl;
-	} 
-	// back to game, or break
-	internal_welcome(allUser, user_ind);
-	//cout << "hello!" << endl;
+		
+		if((allUser[user_ind] -> get_current_lv() == 8) || (allUser[user_ind] -> get_life() == 0))
+		{
+			cout << allUser[user_ind] -> get_current_lv() << endl;
+			cout << allUser[user_ind] -> get_life() << endl;
+			cout << "NONO" << endl;
+			break;
+		}
+	}
+	
+	if(allUser[user_ind] -> get_current_lv() == 8)
+	{
+		allUser[user_ind] -> refill_life();	
+		setUserWish(allUser, user_ind);
+		internal_welcome(allUser, user_ind);
+
+	}
+	else if(allUser[user_ind] -> get_life() == 0)
+	{
+		int banned_time = time(nullptr);
+		cout << "生命值已經沒了，請等候10分鐘後，重新登入，再繼續遊玩..." << endl;	
+		// operations to ban the users
+		allUser[user_ind] ->set_banned_status(true);
+		allUser[user_ind] -> set_banned_time(banned_time);
+		allUser[user_ind] -> refill_life();	
+		internal_welcome(allUser, user_ind);	
+	}
+	else{
+		allUser[user_ind] -> refill_life();	
+		internal_welcome(allUser, user_ind);
+	}
+	
 }
+
+void setUserWish(User** allUser, int user_ind){
+	string wish;
+	bool public_secret;
+		
+		cout << "\恭\喜你完成了所有的關卡，獲得了一次向神燈精靈小傑許願的機會" << endl;
+		cout << "願望可以選擇公開，或是僅讓精靈小傑得知，請在選擇公開情況並輸入願望後"<< endl;
+		cout << "按送出，願望將在最後依答題情況，呈現排名，即精靈小傑的願望實現順序"<< endl;
+		 
+		cout << "公開 0 / 秘密 1 : ";
+		cin >> public_secret;
+		 
+
+
+		allUser[user_ind] -> set_wish_status(public_secret);
+		cout << "你的願望 : "; 
+		cin >> wish;
+		cout << endl;
+		allUser[user_ind] -> set_wish(wish);
+		allUser[user_ind] -> set_complete_status(true);
+}
+
+
