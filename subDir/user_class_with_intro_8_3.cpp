@@ -3,7 +3,9 @@
 #include<vector> 
 #include<fstream> // for file input and output
 #include<sstream> // istringstream
-#include<ctime>
+#include <cstdlib> /* about random */
+#include <ctime> /* about time */
+#include <conio.h>/* kbhit */
 
 using namespace std;
 
@@ -12,6 +14,8 @@ int curr_active_user = 0; // record the number of active user
 const int MAX_USER_NUM = 100;
 const int NUM_OPTION = 4;
 const int LEVEL = 7;
+const int RESPONSE_TIME = 10;
+const int USER_BANNED_TIME = 300;
 
 class User{
 	friend void fileInput(string dir, User** allUser);
@@ -63,7 +67,7 @@ class User{
 
 User::User(string username, string password){
 	curr_active_user++;
-	this ->time_used = 0;
+	this -> time_used = 0;
 	this -> total_ques_answered = 0;
 	this -> life = 5;
 	this -> username = username;
@@ -133,19 +137,40 @@ void User::add_total_ques_answered(){
 }
 
 void User::print(){
-	cout << "Account name: " << this -> username << endl; 
-	cout << "Account Password: " << this -> password << endl;
-	cout << "complete status: " << this -> complete_status << endl;
-	cout << "time used: " << this -> time_used << endl;
-	cout << "trial used: " << this -> total_ques_answered << endl;
-	cout << "life: " << this -> life << endl; 
-	cout << "current level " << this -> current_lv << endl; 
-	cout << "Account status: " << this -> account_status << endl;
+	cout << "帳號名稱 : " << this -> username << endl; 
+	cout << "帳號密碼 : " << this -> password << endl;
+	cout << "是否已完全破關 : ";
+	if(this -> complete_status)
+		cout << "是" << endl;
+	else
+		cout << "否" << endl;
+	cout << "花費時間 : " << this -> time_used << endl;
+	cout << "答題次數 : " << this -> total_ques_answered << endl;
+	cout << "生命值 : " << this -> life << endl; 
+	cout << "現在關卡 : " << this -> current_lv << endl; 
+	cout << "帳號狀態 : " << this -> account_status << endl;
 	//cout << "login status: " << this -> login_status << endl;
-	cout << "wish: " << this -> wish << endl;
-	cout << "wish status: " << this -> wish_status << endl; 
-	cout << "banned status: " << this -> banned_status << endl;
-	cout << "banned time: " << this -> banned_time << endl; 
+	cout << "願望 : " << this -> wish << endl;
+	cout << "願望狀態 : " << this -> wish_status << endl; 
+	cout << "是否可以遊玩 : ";
+	if(this -> banned_status)
+		cout << "不行" << endl;
+	else
+		cout << "可以" << endl; 
+	cout << "剩餘禁止時間(秒) : ";
+	if(this -> banned_time == 0)
+		cout << 0 << endl;
+	else{
+
+		if((time(NULL) - this -> banned_time) <= USER_BANNED_TIME)
+			cout << (time(NULL) - this -> banned_time) << endl;
+		else{
+			//this -> banned_time = 0; // reset to zero
+			cout << 0 << endl;
+		}
+			
+	}
+		
 	cout << "................................" << endl;
 	return;
 }
@@ -290,7 +315,7 @@ void fileInput(string dir, User** allUser){
 	ifstream userFile;
 	userFile.open(dir);
 	if(!userFile)
-		cout << "no file exists";
+		cout << "沒有任何紀錄";
 	else{
 		string tmp_username;
 		string tmp_password;
@@ -323,7 +348,7 @@ void fileOutput(string dir, User** allUser){
 	userFile.open(dir);
 	
 	if(!userFile)
-		cout << "no file exists!";
+		cout << "沒有任何紀錄";
 	else{
 		for(int i = 0; i < curr_active_user; i++)
 			userFile << allUser[i] -> get_username() << " " << allUser[i] -> get_password() << " " 
@@ -353,9 +378,9 @@ int findUser(string user, User** allUser){
 void createUser(User** allUser){ // put all User to global variable? 
 	string username_store;
 	string password_store;
-	cout << "Please enter the account name to create the account (maximum length 10): ";
+	cout << "請輸入帳號名稱來創建帳號(英文、數字及符號以十個字為上限，中文字五個為上限) : ";
 	cin >> username_store;
-	cout << "Please enter the password to create the acoount (maximum length 10): ";
+	cout << "請輸入帳號密碼來創建帳號(英文、數字及符號以十個字為上限，中文字五個為上限) : ";
 	cin >> password_store;
 	cout << endl;
 	
@@ -366,8 +391,8 @@ void createUser(User** allUser){ // put all User to global variable?
 	char continue_status = 0;
 	if(check_user == -1){
 		if(username_store.size() > MAX_ACC_PASS_LEN || password_store.size() > MAX_ACC_PASS_LEN){
-			cout << "length of username or password is not correct (maximum 10 characters)" << endl;
-			cout << "Do you want to try again? (Y/N)";
+			cout << "帳號名稱或密碼不符合規定(英文、數字及符號以十個字為上限，中文字五個為上限)" << endl;
+			cout << "您要再試一次嗎？ (Y/N)";
 			cin >> continue_status;
 			if(continue_status == 'Y')
 				createUser(allUser); // will this line cause problem?
@@ -375,7 +400,7 @@ void createUser(User** allUser){ // put all User to global variable?
 				welcome(allUser);
 		}
 		else{
-			cout << "Welcome out new member!" << "\n";	
+			cout << "歡迎加入我們，新夥伴！" << "\n";	
 			allUser[curr_active_user - 1] = new User(username_store, password_store);
 //			for(int i = 0; i < curr_active_user; i++)
 //		 		allUser[i] -> print();
@@ -386,7 +411,7 @@ void createUser(User** allUser){ // put all User to global variable?
 	}
 	else{
 		//while(true){
-		cout << "The username has been registered." << "\n" << "Press 1 to create another account." <<"\n" <<"Press 2 to login current account." << "\n";
+		cout << "這個名字已經被註冊過了" << "\n" << "請按 1 創建別的帳號" <<"\n" <<"請按 2 登入遊戲" << "\n";
 		int answer = 0;
 		cin >> answer;
 		if(answer == 1)
@@ -400,11 +425,11 @@ void createUser(User** allUser){ // put all User to global variable?
 void Login(User** allUser){
 	string account_store;
 	string password_store;
-	cout << "Please enter your account name: ";
+	cout << "請輸入您的帳號名稱 : ";
 	cin >> account_store;
 	//cout << "\n";
 	
-	cout << "Please enter your password!: ";
+	cout << "請輸入您的帳號密碼 : ";
 	cin >> password_store;
 	
 	int user_ind = -1;
@@ -415,7 +440,7 @@ void Login(User** allUser){
 	
 	if(user_ind != -1){
 
-			cout << "Welcome!" << endl;
+			cout << "歡迎！" << endl;
 			//allUser[user_ind] -> banned_status = false;
 			internal_welcome(allUser, user_ind);
 		// }	
@@ -423,7 +448,7 @@ void Login(User** allUser){
 	else{
 		// if the function doesn;t return, it means that the user might not registered or typed the wrong account/password
 		char continue_status = 0;
-		cout << "The account or password isn't correct. Do you want to try again?(Y/N): ";
+		cout << "帳號名稱或密碼不正確(英文、數字及符號以十個字為上限，中文字五個為上限)。您要再試一次嗎？ (Y/N)";
 		cin >> continue_status;
 		
 		if(continue_status == 'Y')
@@ -435,21 +460,21 @@ void Login(User** allUser){
 }
 
 void internal_welcome(User** allUser, int user_ind){
-	cout << "Welcome our adventurer: " << allUser[user_ind] -> get_username() << "!" << endl;
-	cout << "Select the operation you want to do: " << endl;
-	cout << "[1] Start Game   [2] Log Out  [3] See player information";
+	cout << "歡迎進入遊戲！我們的冒險者 : " << allUser[user_ind] -> get_username() << "！" << endl;
+	cout << "請選擇 : " << endl;
+	cout << "[1] 開始挑戰   [2] 登出  [3] 查看帳號資訊" << endl;
 	int flag;
 	cin >> flag;
 	if(flag == 1){ //char flag != int 1 !!
 		// write all the situation where a person can't play the game here
-		if(allUser[user_ind] -> get_banned_status() == true && (allUser[user_ind] -> get_banned_time() - time(nullptr)) < 300){
-			cout << "You can't play the game because you are temporarily banned!" << endl;
-			cout << "back to internal welcome page" << endl;
+		if(allUser[user_ind] -> get_banned_status() == true && (time(nullptr) - allUser[user_ind] -> get_banned_time() <= USER_BANNED_TIME) ){
+			cout << "您現在不能進入遊戲，因為目前帳號已被暫時凍結..." << endl;
+			cout << "回到登入介面" << endl;
 			internal_welcome(allUser, user_ind);
 		}
 		else if(allUser[user_ind] -> get_complete_status() == true){
-			cout << "You can't play the game because you already passed the game!" << endl;
-			cout << "back to internal welcome page";
+			cout << "一個人只有一次許願的機會，不可以貪心..." << endl;
+			cout << "回到登入介面";
 			internal_welcome(allUser, user_ind);
 		}
 		else{
@@ -469,7 +494,7 @@ void internal_welcome(User** allUser, int user_ind){
 void player_info(User** allUser, int user_ind){
 	allUser[user_ind] -> print();
 	char flag;
-	cout << "Back to Internal Welcome Page? (Y/N)";
+	cout << "回到登入介面？ (Y/N)";
 	cin >> flag;
 	if(flag == 'Y')
 		internal_welcome(allUser, user_ind);
@@ -479,7 +504,7 @@ void player_info(User** allUser, int user_ind){
 
 void welcome(User** allUser)
 {
-	cout << "Welcome! Ready to Play the game?" << "\n" << "Press 1 to sign up" << "\n" << "Press 2 to log in"<< "\n" << "Press 3 to go to intro page" << "\n";
+	cout << "準備好開始挑戰了嗎？" << "\n" << "按 1 創建帳號" << "\n" << "按 2 登入帳號"<< "\n" << "按 3 回到主選單" << "\n";
 	int status = 0;
 	cin >> status;
 	if(status == 1)
@@ -503,7 +528,7 @@ void welcome(User** allUser)
 void intro(User** allUser) // intro -> welcome
 {
 	cout << "台大知識王"  << endl; 
-	cout << "Press 1 to read the story" << "\n" << "Press 2 to see the ranking" << "\n" << "Press 3 to start the game" << "\n"<< "Press 4 to exit" << "\n";
+	cout << "按 1 看故事" << "\n" << "按 2 看願望清單" << "\n" << "按 3 開始遊戲" << "\n"<< "按 4 離開" << "\n";
 	int status = 0;
 	cin >> status;
 	if(status == 1) // story
@@ -525,12 +550,16 @@ void intro(User** allUser) // intro -> welcome
 
 void story(User** allUser)
 {
-	cout << "小明是一位資管系大一的學生，最近在學習程式設計class與operator overloading等進階概念時遇到了很大的困難，且嘗試了很多方法仍效果不彰。最近他突然想到魔法這個手段他還沒有用過，可能可以幫助他順利領悟。" 
-	<< "\n" << "碰巧在一次的跳蚤市場中，小明看到了號稱是阿拉丁神燈的藏寶圖。抱著想要找到精靈的決心，他就把它買了下來，並且在一天的午後實際前往了藏寶地點。出乎他意料的是那邊真的有一個茶壺!" <<  "\n" <<
-	"不幸的是，茶壺的上面寫著只有通過7個有關於台大或生活的問答題才能順利召喚神燈裡的精靈。期被程式語言折磨的小明已經沒有多餘的力氣想題目了。聰明的你，能夠幫助他透過精靈度過必修課的挑戰嗎?"<<  "\n" <<
+	cout << "某天，你突然發現你深陷在夢中，醒不過來，但你只是一個混到畢業的資管系學生，現在是個什麼程式都不會打的無業遊民。" << "\n" <<
+	"你以為在夢裡就能有錢有房有車有女友，結果卻發現在夢中也不能為所欲為，每天只能去超商買即期食品...今天一如往常騎著腳踏車，" << "\n" <<
+	"到超商買微波食品的路上，不只沒有幸運的事情發生，你還為了閃躲走在自行車道的移動式路障，整個人摔進了花叢中，雖然沒有受傷，" << "\n" <<
+	"但腳踏車的車籃直接撞成一個茶壺的形狀當你心疼的摸著車籃的時候，你發現，原來是地上那個破茶壺，把你的車籃弄成這樣，一氣之下，" << "\n" <<
+	"用力地踹了一腳，你「噢嗚！」了一聲，卻也聽到破茶壺「噢嗚！」了一聲，轉頭想拔腿就跑的你，發現忘了騎腳踏車心理雖然很害怕，" << "\n" << 
+	"但是但是更害怕自己什麼都沒有了，所以不能連腳踏車都沒有。正當你一回頭，就被吸進了茶壺的世界，這裡黑漆漆的，只有一台遊戲機，" << "\n" <<
+	"上面寫著：想想你的大學生活到底經歷了什麼吧！如果能夠破完全部的關卡，我就考慮實現你一個願望~~"<< "\n" <<\
 	"規則:" << "\n" << "1.每一次的遊戲當中，你將要答7題由簡單到難的題目。每答對一題就會往上一個等級，但相對的。每答錯一題就會往後退一個等級。"<< "\n" <<
 	"2.每一次的遊戲不能錯超過五題，超過的話會被停權10分鐘。"<< "\n" <<"3.勝利條件: 順利答對等級7的題目。達成之後即可向神燈精靈提出一個願望。" <<"\n" ;
-	cout << "Back to menu?(Y/N)";
+	cout << "回到主選單？ (Y/N)";
 	char answer = 0;
 	cin >> answer;
 	if(answer == 'Y')
@@ -542,7 +571,7 @@ void story(User** allUser)
 void ranking(User** allUser)
 {
 	//cout << "排名待補" << "\n";
-	cout << "congratulations to these players! May rrro make your wish come true..." << endl << endl;
+	cout << "恭喜你們！神燈精靈小傑會按清單順序，考慮實現你們的願望的！" << endl << endl;
 	int success_num = 0;
 	User** success_user = new User*[MAX_USER_NUM];
 	// currently, I define the wish status to be the complete criteria
@@ -557,18 +586,18 @@ void ranking(User** allUser)
 	if(success_num >= 2)
 		sortSuccessUser(success_user, success_num); 
 
-	cout << "username" << "     " << "wishes" << "      " << "used time"<< "     " << "answered question" << endl;
+	cout << "\許\願者" << "     " << "願望" << "      " << "花費時間"<< "     " << "答題次數" << endl;
 	if(success_num == 0){
-		cout << "No one completed the game yet... Be the first person to finish the game!" << endl;
+		cout << "都還沒有人能夠完成...應該會有人成\功\的吧？" << endl;
 	}
 	else{
 		for(int i = 0; i < success_num; i++)
 			cout << success_user[i] -> get_username() << "     " << success_user[i] -> get_wish() << "     " << 
 					success_user[i] -> get_time_used() << "     " << success_user[i] -> get_total_ques_answered() << endl;
 		
-		cout << "congratulations to these players! May rrro make your wish come true...";
+		cout << "恭喜你們！神燈精靈小傑會按清單順序，考慮實現你們的願望的！";
 	}
-	cout << "Back to menu?(Y/N)";
+	cout << "回到主選單？ (Y/N)";
 	char answer = 0;
 	cin >> answer;
 	if(answer == 'Y')
@@ -633,10 +662,6 @@ void gameState(User** allUser, int user_ind)
 		{
 			pick_question += 144;
 		}
-		else{
-			cout << "You have achieved the level!" << endl;
-			break;
-		}
 		
 		cout << ques_obj.get_ques(pick_question) << endl;
 		cout << "A. " << ques_obj.get_option(pick_question, 0) << endl; 
@@ -644,9 +669,36 @@ void gameState(User** allUser, int user_ind)
 		cout << "C. " << ques_obj.get_option(pick_question, 2) << endl; 
 		cout << "D. " << ques_obj.get_option(pick_question, 3) << endl;
 		cout << "玩家答案 : ";
-		cin >> player_answer;
-		cout << "Your answer is " << player_answer << endl;
+		
+		time_t question_start_time;
+		time(&question_start_time);
 
+		while(difftime(time(NULL), question_start_time) != RESPONSE_TIME)
+		{	 
+			//cout << difftime(time(NULL), question_start_time) << endl;
+		
+			if(kbhit())
+			{	
+				allUser[user_ind] -> add_time_used(difftime(time(NULL), question_start_time));
+				int temp_answer = getch();
+				if(temp_answer > 96)
+				{
+					temp_answer -= 32; 
+				}
+				player_answer = temp_answer;
+				
+				break;
+			}	
+		}
+		
+		cout << "您的答案：" << player_answer << endl;
+
+		// add time used
+		if(player_answer == "E")
+		{
+			allUser[user_ind] -> add_time_used(10);
+		} 
+		
 		// check answer
 		if(ques_obj.check_answer(pick_question, player_answer))
 		{
@@ -668,9 +720,6 @@ void gameState(User** allUser, int user_ind)
 		
 		if((allUser[user_ind] -> get_current_lv() == 8) || (allUser[user_ind] -> get_life() == 0))
 		{
-			cout << allUser[user_ind] -> get_current_lv() << endl;
-			cout << allUser[user_ind] -> get_life() << endl;
-			cout << "NONO" << endl;
 			break;
 		}
 	}
@@ -685,7 +734,7 @@ void gameState(User** allUser, int user_ind)
 	else if(allUser[user_ind] -> get_life() == 0)
 	{
 		int banned_time = time(nullptr);
-		cout << "生命值已經沒了，請等候10分鐘後，重新登入，再繼續遊玩..." << endl;	
+		cout << "生命值已經用完，請等候10分鐘，再重新登入，即可繼續遊玩..." << endl;	
 		// operations to ban the users
 		allUser[user_ind] ->set_banned_status(true);
 		allUser[user_ind] -> set_banned_time(banned_time);
@@ -709,7 +758,14 @@ void setUserWish(User** allUser, int user_ind){
 		 
 		cout << "公開 0 / 秘密 1 : ";
 		cin >> public_secret;
-		 
+		if(public_secret == 1)
+		{
+			cout << "願望保密" << endl;
+		}
+		else
+		{
+			cout << "公開願望" << endl;
+		} 
 
 
 		allUser[user_ind] -> set_wish_status(public_secret);
