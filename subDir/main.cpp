@@ -75,7 +75,7 @@ User::User(string username, string password){
 	this -> complete_status = 0;
 	this -> account_status = 1; // status normal 
 	this -> current_lv = 1;
-	this -> wish = "µL";
+	this -> wish = "ç„¡";
 	this -> wish_status = 0;
 	this -> banned_status = 0;
 	this -> banned_time = 0;
@@ -137,27 +137,27 @@ void User::add_total_ques_answered(){
 }
 
 void User::print(){
-	cout << "±b¸¹¦WºÙ : " << this -> username << endl; 
-	cout << "±b¸¹±K½X : " << this -> password << endl;
-	cout << "¬O§_¤w§¹¥þ¯}Ãö : ";
+	cout << "å¸³è™Ÿåç¨± : " << this -> username << endl; 
+	cout << "å¸³è™Ÿå¯†ç¢¼ : " << this -> password << endl;
+	cout << "æ˜¯å¦å·²å®Œå…¨ç ´é—œ : ";
 	if(this -> complete_status)
-		cout << "¬O" << endl;
+		cout << "æ˜¯" << endl;
 	else
-		cout << "§_" << endl;
-	cout << "ªá¶O®É¶¡ : " << this -> time_used << endl;
-	cout << "µªÃD¦¸¼Æ : " << this -> total_ques_answered << endl;
-	cout << "¥Í©R­È : " << this -> life << endl; 
-	cout << "²{¦bÃö¥d : " << this -> current_lv << endl; 
-	cout << "±b¸¹ª¬ºA : " << this -> account_status << endl;
+		cout << "å¦" << endl;
+	cout << "èŠ±è²»æ™‚é–“ : " << this -> time_used << endl;
+	cout << "ç­”é¡Œæ¬¡æ•¸ : " << this -> total_ques_answered << endl;
+	cout << "ç”Ÿå‘½å€¼ : " << this -> life << endl; 
+	cout << "ç¾åœ¨é—œå¡ : " << this -> current_lv << endl; 
+	cout << "å¸³è™Ÿç‹€æ…‹ : " << this -> account_status << endl;
 	//cout << "login status: " << this -> login_status << endl;
-	cout << "Ä@±æ : " << this -> wish << endl;
-	cout << "Ä@±æª¬ºA : " << this -> wish_status << endl; 
-	cout << "¬O§_¥i¥H¹Cª± : ";
+	cout << "é¡˜æœ› : " << this -> wish << endl;
+	cout << "é¡˜æœ›ç‹€æ…‹ : " << this -> wish_status << endl; 
+	cout << "æ˜¯å¦å¯ä»¥éŠçŽ© : ";
 	if(this -> banned_status)
-		cout << "¤£¦æ" << endl;
+		cout << "ä¸è¡Œ" << endl;
 	else
-		cout << "¥i¥H" << endl; 
-	cout << "³Ñ¾l¸T¤î®É¶¡(¬í) : ";
+		cout << "å¯ä»¥" << endl; 
+	cout << "å‰©é¤˜ç¦æ­¢æ™‚é–“(ç§’) : ";
 	if(this -> banned_time == 0)
 		cout << 0 << endl;
 	else{
@@ -194,7 +194,7 @@ Question::Question(){
 
 	// file input - question file(in ansi format)
 	// note that in visual studio code, the default encoding is utf-8
-	std::ifstream quesFile("../question_ansi.txt");
+	std::ifstream quesFile("../question.txt");
 	std::string quesStr;
 	if(quesFile){
 		while(std::getline(quesFile, quesStr)){
@@ -206,7 +206,7 @@ Question::Question(){
 	
 	// option
 	
-	fstream optFile("../options_ansi.txt");
+	fstream optFile("../options.txt");
 	string line;
 	int index_vector = 0;
 	if(optFile){
@@ -230,7 +230,7 @@ Question::Question(){
 	
 	// answer
 
-	fstream answerFile("../answer_ansi.txt");
+	fstream answerFile("../answer.txt");
 	string answer_char;
 	if(answerFile){
 		while(answerFile >> answer_char)
@@ -315,7 +315,7 @@ void fileInput(string dir, User** allUser){
 	ifstream userFile;
 	userFile.open(dir);
 	if(!userFile)
-		cout << "¨S¦³¥ô¦ó¬ö¿ý";
+		cout << "æ²’æœ‰ä»»ä½•ç´€éŒ„";
 	else{
 		string tmp_username;
 		string tmp_password;
@@ -348,7 +348,7 @@ void fileOutput(string dir, User** allUser){
 	userFile.open(dir);
 	
 	if(!userFile)
-		cout << "¨S¦³¥ô¦ó¬ö¿ý";
+		cout << "æ²’æœ‰ä»»ä½•ç´€éŒ„";
 	else{
 		for(int i = 0; i < curr_active_user; i++)
 			userFile << allUser[i] -> get_username() << " " << allUser[i] -> get_password() << " " 
@@ -378,9 +378,9 @@ int findUser(string user, User** allUser){
 void createUser(User** allUser){ // put all User to global variable? 
 	string username_store;
 	string password_store;
-	cout << "½Ð¿é¤J±b¸¹¦WºÙ¨Ó³Ð«Ø±b¸¹(­^¤å¡B¼Æ¦r¤Î²Å¸¹¥H¢Ì­Ó¦r¬°¤W­­¡A¤¤¤å¦r¤­­Ó¬°¤W­­) : ";
+	cout << "è«‹è¼¸å…¥å¸³è™Ÿåç¨±ä¾†å‰µå»ºå¸³è™Ÿ(è‹±æ–‡ã€æ•¸å­—åŠç¬¦è™Ÿä»¥åå€‹å­—ç‚ºä¸Šé™ï¼Œä¸­æ–‡å­—äº”å€‹ç‚ºä¸Šé™) : ";
 	cin >> username_store;
-	cout << "½Ð¿é¤J±b¸¹±K½X¨Ó³Ð«Ø±b¸¹(­^¤å¡B¼Æ¦r¤Î²Å¸¹¥H¢Ì­Ó¦r¬°¤W­­¡A¤¤¤å¦r¤­­Ó¬°¤W­­) : ";
+	cout << "è«‹è¼¸å…¥å¸³è™Ÿå¯†ç¢¼ä¾†å‰µå»ºå¸³è™Ÿ(è‹±æ–‡ã€æ•¸å­—åŠç¬¦è™Ÿä»¥åå€‹å­—ç‚ºä¸Šé™ï¼Œä¸­æ–‡å­—äº”å€‹ç‚ºä¸Šé™) : ";
 	cin >> password_store;
 	cout << endl;
 	
@@ -391,8 +391,8 @@ void createUser(User** allUser){ // put all User to global variable?
 	char continue_status = 0;
 	if(check_user == -1){
 		if(username_store.size() > MAX_ACC_PASS_LEN || password_store.size() > MAX_ACC_PASS_LEN){
-			cout << "±b¸¹¦WºÙ©Î±K½X¤£²Å¦X³W©w(­^¤å¡B¼Æ¦r¤Î²Å¸¹¥H¢Ì­Ó¦r¬°¤W­­¡A¤¤¤å¦r¤­­Ó¬°¤W­­)" << endl;
-			cout << "±z­n¦A¸Õ¤@¦¸¶Ü¡H (Y/N)";
+			cout << "å¸³è™Ÿåç¨±æˆ–å¯†ç¢¼ä¸ç¬¦åˆè¦å®š(è‹±æ–‡ã€æ•¸å­—åŠç¬¦è™Ÿä»¥åå€‹å­—ç‚ºä¸Šé™ï¼Œä¸­æ–‡å­—äº”å€‹ç‚ºä¸Šé™)" << endl;
+			cout << "æ‚¨è¦å†è©¦ä¸€æ¬¡å—Žï¼Ÿ (Y/N)";
 			cin >> continue_status;
 			if(continue_status == 'Y')
 				createUser(allUser); // will this line cause problem?
@@ -400,7 +400,7 @@ void createUser(User** allUser){ // put all User to global variable?
 				welcome(allUser);
 		}
 		else{
-			cout << "Åwªï¥[¤J§Ú­Ì¡A·s¹Ù¦ñ¡I" << "\n";	
+			cout << "æ­¡è¿ŽåŠ å…¥æˆ‘å€‘ï¼Œæ–°å¤¥ä¼´ï¼" << "\n";	
 			allUser[curr_active_user - 1] = new User(username_store, password_store);
 //			for(int i = 0; i < curr_active_user; i++)
 //		 		allUser[i] -> print();
@@ -411,7 +411,7 @@ void createUser(User** allUser){ // put all User to global variable?
 	}
 	else{
 		//while(true){
-		cout << "³o­Ó¦W¦r¤w¸g³Qµù¥U¹L¤F" << "\n" << "½Ð«ö 1 ³Ð«Ø§Oªº±b¸¹" <<"\n" <<"½Ð«ö 2 µn¤J¹CÀ¸" << "\n";
+		cout << "é€™å€‹åå­—å·²ç¶“è¢«è¨»å†ŠéŽäº†" << "\n" << "è«‹æŒ‰ 1 å‰µå»ºåˆ¥çš„å¸³è™Ÿ" <<"\n" <<"è«‹æŒ‰ 2 ç™»å…¥éŠæˆ²" << "\n";
 		int answer = 0;
 		cin >> answer;
 		if(answer == 1)
@@ -425,11 +425,11 @@ void createUser(User** allUser){ // put all User to global variable?
 void Login(User** allUser){
 	string account_store;
 	string password_store;
-	cout << "½Ð¿é¤J±zªº±b¸¹¦WºÙ : ";
+	cout << "è«‹è¼¸å…¥æ‚¨çš„å¸³è™Ÿåç¨± : ";
 	cin >> account_store;
 	//cout << "\n";
 	
-	cout << "½Ð¿é¤J±zªº±b¸¹±K½X : ";
+	cout << "è«‹è¼¸å…¥æ‚¨çš„å¸³è™Ÿå¯†ç¢¼ : ";
 	cin >> password_store;
 	
 	int user_ind = -1;
@@ -440,7 +440,7 @@ void Login(User** allUser){
 	
 	if(user_ind != -1){
 
-			cout << "Åwªï¡I" << endl;
+			cout << "æ­¡è¿Žï¼" << endl;
 			//allUser[user_ind] -> banned_status = false;
 			internal_welcome(allUser, user_ind);
 		// }	
@@ -448,7 +448,7 @@ void Login(User** allUser){
 	else{
 		// if the function doesn;t return, it means that the user might not registered or typed the wrong account/password
 		char continue_status = 0;
-		cout << "±b¸¹¦WºÙ©Î±K½X¤£¥¿½T(­^¤å¡B¼Æ¦r¤Î²Å¸¹¥H¢Ì­Ó¦r¬°¤W­­¡A¤¤¤å¦r¤­­Ó¬°¤W­­)¡C±z­n¦A¸Õ¤@¦¸¶Ü¡H (Y/N)";
+		cout << "å¸³è™Ÿåç¨±æˆ–å¯†ç¢¼ä¸æ­£ç¢º(è‹±æ–‡ã€æ•¸å­—åŠç¬¦è™Ÿä»¥åå€‹å­—ç‚ºä¸Šé™ï¼Œä¸­æ–‡å­—äº”å€‹ç‚ºä¸Šé™)ã€‚æ‚¨è¦å†è©¦ä¸€æ¬¡å—Žï¼Ÿ (Y/N)";
 		cin >> continue_status;
 		
 		if(continue_status == 'Y')
@@ -460,21 +460,21 @@ void Login(User** allUser){
 }
 
 void internal_welcome(User** allUser, int user_ind){
-	cout << "Åwªï¶i¤J¹CÀ¸¡I§Ú­Ìªº«_ÀIªÌ : " << allUser[user_ind] -> get_username() << "¡I" << endl;
-	cout << "½Ð¿ï¾Ü : " << endl;
-	cout << "[1] ¶}©l¬D¾Ô   [2] µn¥X  [3] ¬d¬Ý±b¸¹¸ê°T" << endl;
+	cout << "æ­¡è¿Žé€²å…¥éŠæˆ²ï¼æˆ‘å€‘çš„å†’éšªè€… : " << allUser[user_ind] -> get_username() << "ï¼" << endl;
+	cout << "è«‹é¸æ“‡ : " << endl;
+	cout << "[1] é–‹å§‹æŒ‘æˆ°   [2] ç™»å‡º  [3] æŸ¥çœ‹å¸³è™Ÿè³‡è¨Š" << endl;
 	int flag;
 	cin >> flag;
 	if(flag == 1){ //char flag != int 1 !!
 		// write all the situation where a person can't play the game here
 		if(allUser[user_ind] -> get_banned_status() == true && (time(nullptr) - allUser[user_ind] -> get_banned_time() <= USER_BANNED_TIME) ){
-			cout << "±z²{¦b¤£¯à¶i¤J¹CÀ¸¡A¦]¬°¥Ø«e±b¸¹¤w³Q¼È®É­áµ²..." << endl;
-			cout << "¦^¨ìµn¤J¤¶­±" << endl;
+			cout << "æ‚¨ç¾åœ¨ä¸èƒ½é€²å…¥éŠæˆ²ï¼Œå› ç‚ºç›®å‰å¸³è™Ÿå·²è¢«æš«æ™‚å‡çµ..." << endl;
+			cout << "å›žåˆ°ç™»å…¥ä»‹é¢" << endl;
 			internal_welcome(allUser, user_ind);
 		}
 		else if(allUser[user_ind] -> get_complete_status() == true){
-			cout << "¤@­Ó¤H¥u¦³¤@¦¸³\Ä@ªº¾÷·|¡A¤£¥i¥H³g¤ß..." << endl;
-			cout << "¦^¨ìµn¤J¤¶­±";
+			cout << "ä¸€å€‹äººåªæœ‰ä¸€æ¬¡è¨±é¡˜çš„æ©Ÿæœƒï¼Œä¸å¯ä»¥è²ªå¿ƒ..." << endl;
+			cout << "å›žåˆ°ç™»å…¥ä»‹é¢";
 			internal_welcome(allUser, user_ind);
 		}
 		else{
@@ -494,7 +494,7 @@ void internal_welcome(User** allUser, int user_ind){
 void player_info(User** allUser, int user_ind){
 	allUser[user_ind] -> print();
 	char flag;
-	cout << "¦^¨ìµn¤J¤¶­±¡H (Y/N)";
+	cout << "å›žåˆ°ç™»å…¥ä»‹é¢ï¼Ÿ (Y/N)";
 	cin >> flag;
 	if(flag == 'Y')
 		internal_welcome(allUser, user_ind);
@@ -504,7 +504,7 @@ void player_info(User** allUser, int user_ind){
 
 void welcome(User** allUser)
 {
-	cout << "·Ç³Æ¦n¶}©l¬D¾Ô¤F¶Ü¡H" << "\n" << "«ö 1 ³Ð«Ø±b¸¹" << "\n" << "«ö 2 µn¤J±b¸¹"<< "\n" << "«ö 3 ¦^¨ì¥D¿ï³æ" << "\n";
+	cout << "æº–å‚™å¥½é–‹å§‹æŒ‘æˆ°äº†å—Žï¼Ÿ" << "\n" << "æŒ‰ 1 å‰µå»ºå¸³è™Ÿ" << "\n" << "æŒ‰ 2 ç™»å…¥å¸³è™Ÿ"<< "\n" << "æŒ‰ 3 å›žåˆ°ä¸»é¸å–®" << "\n";
 	int status = 0;
 	cin >> status;
 	if(status == 1)
@@ -527,8 +527,8 @@ void welcome(User** allUser)
 
 void intro(User** allUser) // intro -> welcome
 {
-	cout << "¥x¤jª¾ÃÑ¤ý"  << endl; 
-	cout << "«ö 1 ¬Ý¬G¨Æ" << "\n" << "«ö 2 ¬ÝÄ@±æ²M³æ" << "\n" << "«ö 3 ¶}©l¹CÀ¸" << "\n"<< "«ö 4 Â÷¶}" << "\n";
+	cout << "å°å¤§çŸ¥è­˜çŽ‹"  << endl; 
+	cout << "æŒ‰ 1 çœ‹æ•…äº‹" << "\n" << "æŒ‰ 2 çœ‹é¡˜æœ›æ¸…å–®" << "\n" << "æŒ‰ 3 é–‹å§‹éŠæˆ²" << "\n"<< "æŒ‰ 4 é›¢é–‹" << "\n";
 	int status = 0;
 	cin >> status;
 	if(status == 1) // story
@@ -550,16 +550,16 @@ void intro(User** allUser) // intro -> welcome
 
 void story(User** allUser)
 {
-	cout << "¬Y¤Ñ¡A§A¬ðµMµo²{§A²`³´¦b¹Ú¤¤¡A¿ô¤£¹L¨Ó¡A¦ý§A¥u¬O¤@­Ó²V¨ì²¦·~ªº¸êºÞ¨t¾Ç¥Í¡A²{¦b¬O­Ó¤°»òµ{¦¡³£¤£·|¥´ªºµL·~¹C¥Á¡C" << "\n" <<
-	"§A¥H¬°¦b¹Ú¸Ì´N¯à¦³¿ú¦³©Ð¦³¨®¦³¤k¤Í¡Aµ²ªG«oµo²{¦b¹Ú¤¤¤]¤£¯à¬°©Ò±ý¬°¡A¨C¤Ñ¥u¯à¥h¶W°Ó¶R§Y´Á­¹«~...¤µ¤Ñ¤@¦p©¹±`ÃMµÛ¸}½ñ¨®¡A" << "\n" <<
-	"¨ì¶W°Ó¶R·Lªi­¹«~ªº¸ô¤W¡A¤£¥u¨S¦³©¯¹Bªº¨Æ±¡µo¥Í¡A§AÁÙ¬°¤F°{¸ú¨«¦b¦Û¦æ¨®¹Dªº²¾°Ê¦¡¸ô»Ù¡A¾ã­Ó¤HºL¶i¤FªáÂO¤¤¡AÁöµM¨S¦³¨ü¶Ë¡A" << "\n" <<
-	"¦ý¸}½ñ¨®ªº¨®Äxª½±µ¼²¦¨¤@­Ó¯ù³ýªº§Îª¬·í§A¤ß¯kªººNµÛ¨®Äxªº®É­Ô¡A§Aµo²{¡A­ì¨Ó¬O¦a¤W¨º­Ó¯}¯ù³ý¡A§â§Aªº¨®Äx§Ë¦¨³o¼Ë¡A¤@®ð¤§¤U¡A" << "\n" <<
-	"¥Î¤O¦a¿å¤F¤@¸}¡A§A¡u¾¾¶ã¡I¡v¤F¤@Án¡A«o¤]Å¥¨ì¯}¯ù³ý¡u¾¾¶ã¡I¡v¤F¤@Án¡AÂàÀY·Q©Þ»L´N¶]ªº§A¡Aµo²{§Ñ¤FÃM¸}½ñ¨®¤ß²zÁöµM«Ü®`©È¡A" << "\n" << 
-	"¦ý¬O¦ý¬O§ó®`©È¦Û¤v¤°»ò³£¨S¦³¤F¡A©Ò¥H¤£¯à³s¸}½ñ¨®³£¨S¦³¡C¥¿·í§A¤@¦^ÀY¡A´N³Q§l¶i¤F¯ù³ýªº¥@¬É¡A³o¸Ì¶Âº£º£ªº¡A¥u¦³¤@¥x¹CÀ¸¾÷¡A" << "\n" <<
-	"¤W­±¼gµÛ¡G·Q·Q§Aªº¤j¾Ç¥Í¬¡¨ì©³¸g¾ú¤F¤°»ò§a¡I¦pªG¯à°÷¯}§¹¥þ³¡ªºÃö¥d¡A§Ú´N¦Ò¼{¹ê²{§A¤@­ÓÄ@±æ~~"<< "\n" <<\
-	"³W«h:" << "\n" << "1.¨C¤@¦¸ªº¹CÀ¸·í¤¤¡A§A±N­nµª7ÃD¥ÑÂ²³æ¨ìÃøªºÃD¥Ø¡C¨Cµª¹ï¤@ÃD´N·|©¹¤W¤@­Óµ¥¯Å¡A¦ý¬Û¹ïªº¡C¨Cµª¿ù¤@ÃD´N·|©¹«á°h¤@­Óµ¥¯Å¡C"<< "\n" <<
-	"2.¨C¤@¦¸ªº¹CÀ¸¤£¯à¿ù¶W¹L¤­ÃD¡A¶W¹Lªº¸Ü·|³Q°±Åv10¤ÀÄÁ¡C"<< "\n" <<"3.³Ó§Q±ø¥ó: ¶¶§Qµª¹ïµ¥¯Å7ªºÃD¥Ø¡C¹F¦¨¤§«á§Y¥i¦V¯«¿OºëÆF´£¥X¤@­ÓÄ@±æ¡C" <<"\n" ;
-	cout << "¦^¨ì¥D¿ï³æ¡H (Y/N)";
+	cout << "æŸå¤©ï¼Œä½ çªç„¶ç™¼ç¾ä½ æ·±é™·åœ¨å¤¢ä¸­ï¼Œé†’ä¸éŽä¾†ï¼Œä½†ä½ åªæ˜¯ä¸€å€‹æ··åˆ°ç•¢æ¥­çš„è³‡ç®¡ç³»å­¸ç”Ÿï¼Œç¾åœ¨æ˜¯å€‹ä»€éº¼ç¨‹å¼éƒ½ä¸æœƒæ‰“çš„ç„¡æ¥­éŠæ°‘ã€‚" << "\n" <<
+	"ä½ ä»¥ç‚ºåœ¨å¤¢è£¡å°±èƒ½æœ‰éŒ¢æœ‰æˆ¿æœ‰è»Šæœ‰å¥³å‹ï¼Œçµæžœå»ç™¼ç¾åœ¨å¤¢ä¸­ä¹Ÿä¸èƒ½ç‚ºæ‰€æ¬²ç‚ºï¼Œæ¯å¤©åªèƒ½åŽ»è¶…å•†è²·å³æœŸé£Ÿå“...ä»Šå¤©ä¸€å¦‚å¾€å¸¸é¨Žè‘—è…³è¸è»Šï¼Œ" << "\n" <<
+	"åˆ°è¶…å•†è²·å¾®æ³¢é£Ÿå“çš„è·¯ä¸Šï¼Œä¸åªæ²’æœ‰å¹¸é‹çš„äº‹æƒ…ç™¼ç”Ÿï¼Œä½ é‚„ç‚ºäº†é–ƒèº²èµ°åœ¨è‡ªè¡Œè»Šé“çš„ç§»å‹•å¼è·¯éšœï¼Œæ•´å€‹äººæ‘”é€²äº†èŠ±å¢ä¸­ï¼Œé›–ç„¶æ²’æœ‰å—å‚·ï¼Œ" << "\n" <<
+	"ä½†è…³è¸è»Šçš„è»Šç±ƒç›´æŽ¥æ’žæˆä¸€å€‹èŒ¶å£ºçš„å½¢ç‹€ç•¶ä½ å¿ƒç–¼çš„æ‘¸è‘—è»Šç±ƒçš„æ™‚å€™ï¼Œä½ ç™¼ç¾ï¼ŒåŽŸä¾†æ˜¯åœ°ä¸Šé‚£å€‹ç ´èŒ¶å£ºï¼ŒæŠŠä½ çš„è»Šç±ƒå¼„æˆé€™æ¨£ï¼Œä¸€æ°£ä¹‹ä¸‹ï¼Œ" << "\n" <<
+	"ç”¨åŠ›åœ°è¸¹äº†ä¸€è…³ï¼Œä½ ã€Œå™¢å—šï¼ã€äº†ä¸€è²ï¼Œå»ä¹Ÿè½åˆ°ç ´èŒ¶å£ºã€Œå™¢å—šï¼ã€äº†ä¸€è²ï¼Œè½‰é ­æƒ³æ‹”è…¿å°±è·‘çš„ä½ ï¼Œç™¼ç¾å¿˜äº†é¨Žè…³è¸è»Šå¿ƒç†é›–ç„¶å¾ˆå®³æ€•ï¼Œ" << "\n" << 
+	"ä½†æ˜¯ä½†æ˜¯æ›´å®³æ€•è‡ªå·±ä»€éº¼éƒ½æ²’æœ‰äº†ï¼Œæ‰€ä»¥ä¸èƒ½é€£è…³è¸è»Šéƒ½æ²’æœ‰ã€‚æ­£ç•¶ä½ ä¸€å›žé ­ï¼Œå°±è¢«å¸é€²äº†èŒ¶å£ºçš„ä¸–ç•Œï¼Œé€™è£¡é»‘æ¼†æ¼†çš„ï¼Œåªæœ‰ä¸€å°éŠæˆ²æ©Ÿï¼Œ" << "\n" <<
+	"ä¸Šé¢å¯«è‘—ï¼šæƒ³æƒ³ä½ çš„å¤§å­¸ç”Ÿæ´»åˆ°åº•ç¶“æ­·äº†ä»€éº¼å§ï¼å¦‚æžœèƒ½å¤ ç ´å®Œå…¨éƒ¨çš„é—œå¡ï¼Œæˆ‘å°±è€ƒæ…®å¯¦ç¾ä½ ä¸€å€‹é¡˜æœ›~~"<< "\n" <<\
+	"è¦å‰‡:" << "\n" << "1.æ¯ä¸€æ¬¡çš„éŠæˆ²ç•¶ä¸­ï¼Œä½ å°‡è¦ç­”7é¡Œç”±ç°¡å–®åˆ°é›£çš„é¡Œç›®ã€‚æ¯ç­”å°ä¸€é¡Œå°±æœƒå¾€ä¸Šä¸€å€‹ç­‰ç´šï¼Œä½†ç›¸å°çš„ã€‚æ¯ç­”éŒ¯ä¸€é¡Œå°±æœƒå¾€å¾Œé€€ä¸€å€‹ç­‰ç´šã€‚"<< "\n" <<
+	"2.æ¯ä¸€æ¬¡çš„éŠæˆ²ä¸èƒ½éŒ¯è¶…éŽäº”é¡Œï¼Œè¶…éŽçš„è©±æœƒè¢«åœæ¬Š10åˆ†é˜ã€‚"<< "\n" <<"3.å‹åˆ©æ¢ä»¶: é †åˆ©ç­”å°ç­‰ç´š7çš„é¡Œç›®ã€‚é”æˆä¹‹å¾Œå³å¯å‘ç¥žç‡ˆç²¾éˆæå‡ºä¸€å€‹é¡˜æœ›ã€‚" <<"\n" ;
+	cout << "å›žåˆ°ä¸»é¸å–®ï¼Ÿ (Y/N)";
 	char answer = 0;
 	cin >> answer;
 	if(answer == 'Y')
@@ -570,8 +570,8 @@ void story(User** allUser)
 
 void ranking(User** allUser)
 {
-	//cout << "±Æ¦W«Ý¸É" << "\n";
-	cout << "®¥³ß§A­Ì¡I¯«¿OºëÆF¤p³Ç·|«ö²M³æ¶¶§Ç¡A¦Ò¼{¹ê²{§A­ÌªºÄ@±æªº¡I" << endl << endl;
+	//cout << "æŽ’åå¾…è£œ" << "\n";
+	cout << "æ­å–œä½ å€‘ï¼ç¥žç‡ˆç²¾éˆå°å‚‘æœƒæŒ‰æ¸…å–®é †åºï¼Œè€ƒæ…®å¯¦ç¾ä½ å€‘çš„é¡˜æœ›çš„ï¼" << endl << endl;
 	int success_num = 0;
 	User** success_user = new User*[MAX_USER_NUM];
 	// currently, I define the wish status to be the complete criteria
@@ -586,18 +586,18 @@ void ranking(User** allUser)
 	if(success_num >= 2)
 		sortSuccessUser(success_user, success_num); 
 
-	cout << "\³\\Ä@ªÌ" << "     " << "Ä@±æ" << "      " << "ªá¶O®É¶¡"<< "     " << "µªÃD¦¸¼Æ" << endl;
+	cout << "\è¨±\é¡˜è€…" << "     " << "é¡˜æœ›" << "      " << "èŠ±è²»æ™‚é–“"<< "     " << "ç­”é¡Œæ¬¡æ•¸" << endl;
 	if(success_num == 0){
-		cout << "³£ÁÙ¨S¦³¤H¯à°÷§¹¦¨...À³¸Ó·|¦³¤H¦¨\¥\\ªº§a¡H" << endl;
+		cout << "éƒ½é‚„æ²’æœ‰äººèƒ½å¤ å®Œæˆ...æ‡‰è©²æœƒæœ‰äººæˆ\åŠŸ\çš„å§ï¼Ÿ" << endl;
 	}
 	else{
 		for(int i = 0; i < success_num; i++)
 			cout << success_user[i] -> get_username() << "     " << success_user[i] -> get_wish() << "     " << 
 					success_user[i] -> get_time_used() << "     " << success_user[i] -> get_total_ques_answered() << endl;
 		
-		cout << "®¥³ß§A­Ì¡I¯«¿OºëÆF¤p³Ç·|«ö²M³æ¶¶§Ç¡A¦Ò¼{¹ê²{§A­ÌªºÄ@±æªº¡I";
+		cout << "æ­å–œä½ å€‘ï¼ç¥žç‡ˆç²¾éˆå°å‚‘æœƒæŒ‰æ¸…å–®é †åºï¼Œè€ƒæ…®å¯¦ç¾ä½ å€‘çš„é¡˜æœ›çš„ï¼";
 	}
-	cout << "¦^¨ì¥D¿ï³æ¡H (Y/N)";
+	cout << "å›žåˆ°ä¸»é¸å–®ï¼Ÿ (Y/N)";
 	char answer = 0;
 	cin >> answer;
 	if(answer == 'Y')
@@ -668,12 +668,12 @@ void gameState(User** allUser, int user_ind)
 		cout << "B. " << ques_obj.get_option(pick_question, 1) << endl; 
 		cout << "C. " << ques_obj.get_option(pick_question, 2) << endl; 
 		cout << "D. " << ques_obj.get_option(pick_question, 3) << endl;
-		cout << "ª±®aµª®× : ";
+		cout << "çŽ©å®¶ç­”æ¡ˆ : ";
 		
 		time_t question_start_time;
 		time(&question_start_time);
 
-		while(difftime(time(NULL), question_start_time) != RESPONSE_TIME)
+		while(difftime(time(NULL), question_start_time) != RESPONSE_TIME) // the response time is ten seconds
 		{	 
 			//cout << difftime(time(NULL), question_start_time) << endl;
 		
@@ -691,7 +691,7 @@ void gameState(User** allUser, int user_ind)
 			}	
 		}
 		
-		cout << "±zªºµª®×¡G" << player_answer << endl;
+		cout << "æ‚¨çš„ç­”æ¡ˆï¼š" << player_answer << endl;
 
 		// add time used
 		if(player_answer == "E")
@@ -702,14 +702,14 @@ void gameState(User** allUser, int user_ind)
 		// check answer
 		if(ques_obj.check_answer(pick_question, player_answer))
 		{
-			cout << "®¥³ßµª¹ï¤F!" << endl;
+			cout << "æ­å–œç­”å°äº†!" << endl;
 			allUser[user_ind] -> increment_lv();
 		}
 		else
 		{
-			cout << "³á¤£!µª¿ù¤F..." << endl; 
+			cout << "å–”ä¸!ç­”éŒ¯äº†..." << endl; 
 			allUser[user_ind] -> deduct_life();
-			cout << "¥Í©R­È : " << allUser[user_ind] -> get_life() << endl;
+			cout << "ç”Ÿå‘½å€¼ : " << allUser[user_ind] -> get_life() << endl;
 			allUser[user_ind] -> decrement_lv();
 			
 		}
@@ -734,7 +734,7 @@ void gameState(User** allUser, int user_ind)
 	else if(allUser[user_ind] -> get_life() == 0)
 	{
 		int banned_time = time(nullptr);
-		cout << "¥Í©R­È¤w¸g¥Î§¹¡A½Ðµ¥­Ô10¤ÀÄÁ¡A¦A­«·sµn¤J¡A§Y¥iÄ~Äò¹Cª±..." << endl;	
+		cout << "ç”Ÿå‘½å€¼å·²ç¶“ç”¨å®Œï¼Œè«‹ç­‰å€™10åˆ†é˜ï¼Œå†é‡æ–°ç™»å…¥ï¼Œå³å¯ç¹¼çºŒéŠçŽ©..." << endl;	
 		// operations to ban the users
 		allUser[user_ind] ->set_banned_status(true);
 		allUser[user_ind] -> set_banned_time(banned_time);
@@ -752,24 +752,24 @@ void setUserWish(User** allUser, int user_ind){
 	string wish;
 	bool public_secret;
 		
-		cout << "\®¥\³ß§A§¹¦¨¤F©Ò¦³ªºÃö¥d¡AÀò±o¤F¤@¦¸¦V¯«¿OºëÆF¤p³Ç³\Ä@ªº¾÷·|" << endl;
-		cout << "Ä@±æ¥i¥H¿ï¾Ü¤½¶}¡A©Î¬O¶ÈÅýºëÆF¤p³Ç±oª¾¡A½Ð¦b¿ï¾Ü¤½¶}±¡ªp¨Ã¿é¤JÄ@±æ«á"<< endl;
-		cout << "«ö°e¥X¡AÄ@±æ±N¦b³Ì«á¨ÌµªÃD±¡ªp¡A§e²{±Æ¦W¡A§YºëÆF¤p³ÇªºÄ@±æ¹ê²{¶¶§Ç"<< endl;
+		cout << "\æ­\å–œä½ å®Œæˆäº†æ‰€æœ‰çš„é—œå¡ï¼Œç²å¾—äº†ä¸€æ¬¡å‘ç¥žç‡ˆç²¾éˆå°å‚‘è¨±é¡˜çš„æ©Ÿæœƒ" << endl;
+		cout << "é¡˜æœ›å¯ä»¥é¸æ“‡å…¬é–‹ï¼Œæˆ–æ˜¯åƒ…è®“ç²¾éˆå°å‚‘å¾—çŸ¥ï¼Œè«‹åœ¨é¸æ“‡å…¬é–‹æƒ…æ³ä¸¦è¼¸å…¥é¡˜æœ›å¾Œ"<< endl;
+		cout << "æŒ‰é€å‡ºï¼Œé¡˜æœ›å°‡åœ¨æœ€å¾Œä¾ç­”é¡Œæƒ…æ³ï¼Œå‘ˆç¾æŽ’åï¼Œå³ç²¾éˆå°å‚‘çš„é¡˜æœ›å¯¦ç¾é †åº"<< endl;
 		 
-		cout << "¤½¶} 0 / ¯µ±K 1 : ";
+		cout << "å…¬é–‹ 0 / ç§˜å¯† 1 : ";
 		cin >> public_secret;
 		if(public_secret == 1)
 		{
-			cout << "Ä@±æ«O±K" << endl;
+			cout << "é¡˜æœ›ä¿å¯†" << endl;
 		}
 		else
 		{
-			cout << "¤½¶}Ä@±æ" << endl;
+			cout << "å…¬é–‹é¡˜æœ›" << endl;
 		} 
 
 
 		allUser[user_ind] -> set_wish_status(public_secret);
-		cout << "§AªºÄ@±æ : "; 
+		cout << "ä½ çš„é¡˜æœ› : "; 
 		cin >> wish;
 		cout << endl;
 		allUser[user_ind] -> set_wish(wish);
