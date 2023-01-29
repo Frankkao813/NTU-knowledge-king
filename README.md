@@ -13,3 +13,4 @@ This repository can be classifed into three sections:
 
 Note that this repository only contains the CLI version of the game, the full GUI game is in another repository.
 
+compilation: `g++ User_State.cpp Question.cpp main.cpp -o NTU_game`
