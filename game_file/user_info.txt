@@ -1,5 +1,5 @@
 testFrank password 0 11 27 5 2 1 無 0 0 1640695395
 testBetty password 0 5 0 5 1 1 無 0 1 1640694278
 testPiggg password 1 0 0 5 8 1 無 0 0 0
-muen90000 00000000 0 23 104 5 4 1 無 0 0 1674918772
+muen90000 00000000 0 37 164 5 2 1 無 0 0 1674918772
 testNTUCH password 1 19 107 5 8 1 無 0 0 0
