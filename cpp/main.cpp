@@ -6,6 +6,7 @@
 #include <cstdlib> /* about random */
 #include <ctime> /* about time */
 #include <conio.h>/* kbhit */
+#include "../hpp/Question.hpp"
 
 using namespace std;
 
@@ -75,7 +76,7 @@ User::User(string username, string password){
 	this -> complete_status = 0;
 	this -> account_status = 1; // status normal 
 	this -> current_lv = 1;
-	this -> wish = "無";
+	this -> wish = "NA";
 	this -> wish_status = 0;
 	this -> banned_status = 0;
 	this -> banned_time = 0;
@@ -175,85 +176,6 @@ void User::print(){
 	return;
 }
 
-class Question{
-	friend class check_answer;
-	private:
-		int num_question;
-		vector<string> ques_vec; // a single dimensional vector storing the questions
-		vector<vector<string>> option_vec; // a two dimensional vector storing options (4 options)
-		vector<string> answer_vec; // a single dimensional vector storing the answer of the answer to the question;
-	public:
-		Question(); // constructor, questions, options, and answers will also be written into it
-		string get_ques(int ind_ques){return ques_vec[ind_ques];} // get the desired question
-		string get_option(int row, int col){return option_vec[row][col];} // get the desired option
-		// int get_ans(int ind_ans); // to obtain the answer to the question
-		bool check_answer(int ind_ques, string userInput); // to check if the answer is correct
-};
-
-Question::Question(){
-
-	// file input - question file(in ansi format)
-	// note that in visual studio code, the default encoding is utf-8
-	std::ifstream quesFile("../question.txt");
-	std::string quesStr;
-	if(quesFile){
-		while(std::getline(quesFile, quesStr)){
-			//cout << quesStr << endl;
-			ques_vec.push_back(quesStr);
-		}	
-	}
-	quesFile.close();
-	
-	// option
-	
-	fstream optFile("../options.txt");
-	string line;
-	int index_vector = 0;
-	if(optFile){
-			// changing the line (type: string) to input stream	
-		string option_line;
-		while (getline(optFile, option_line,'\n')) {
-		 	istringstream templine(option_line);
-			option_vec.push_back(vector<string>()); // pushback an empty string vector
-			index_vector += 1;
-			string option;
-			while(getline(templine, option, ',')){
-				option_vec[index_vector - 1].push_back(option);
-				//cout << index_vector << endl; 
-				//cout << option << endl;
-			}
-		}	
-	}	
-	optFile.close();
-
-	
-	
-	// answer
-
-	fstream answerFile("../answer.txt");
-	string answer_char;
-	if(answerFile){
-		while(answerFile >> answer_char)
-			answer_vec.push_back(answer_char);
-	}
-	answerFile.close();
-
-
-	//cout << option_vec.size() << endl;
-	//cout << ques_vec.size() << endl;
-	//cout << answer_vec.size() << endl;
-
-}
-
-
-// to check if the user inputs the correct answer
-bool Question::check_answer(int i, string userInput){
-	if(answer_vec[i] == userInput)
-		return true;
-	else
-		return false;
-}
-
 
 void fileInput(string dir, User** allUser);
 void fileOutput(string dir, User** allUser);
@@ -272,7 +194,7 @@ void setUserWish(User** allUser, int user_ind);
 
 
 int main(){	
-	string dir = "../user_info.txt";
+	string dir = "../game_file/user_info.txt";
 	User** allUser = new User*[MAX_USER_NUM]; // the pointer array to store all users
 	fileInput(dir, allUser);
 	
