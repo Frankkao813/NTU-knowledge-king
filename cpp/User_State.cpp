@@ -8,13 +8,13 @@ const int MAX_USER_NUM = 100;
 const int NUM_OPTION = 4;
 const int LEVEL = 7;
 const int RESPONSE_TIME = 10;
-const int USER_BANNED_TIME = 300;
+const int USER_BANNED_TIME = 30;
 
 User::User(std::string username, std::string password){
 	curr_active_user++;
 	this -> time_used = 0;
 	this -> total_ques_answered = 0;
-	this -> life = 5;
+	this -> life = 6;
 	this -> username = username;
 	this -> password = password; 
 	this -> complete_status = 0;
@@ -53,7 +53,7 @@ void User::deduct_life(){
 		
 }
 void User::refill_life(){
-	this -> life = 5;
+	this -> life = 6;
 }
 
 void User::add_time_used(int time_in_question){
@@ -449,34 +449,8 @@ void gameState(User** allUser, int user_ind)
 		srand( time(NULL) );
 		
 		int pick_question = rand() % 24;
-		if(allUser[user_ind] -> get_current_lv() == 1)
-		{	
-			pick_question += 0; 
-		}
-		if(allUser[user_ind] -> get_current_lv() == 2)
-		{
-			pick_question += 24;
-		}
-		if(allUser[user_ind] -> get_current_lv() == 3)
-		{
-			pick_question += 48;
-		}
-		if(allUser[user_ind] -> get_current_lv() == 4)
-		{
-			pick_question += 72;
-		}
-		if(allUser[user_ind] -> get_current_lv() == 5)
-		{
-			pick_question += 96;
-		}
-		if(allUser[user_ind] -> get_current_lv() == 6)
-		{
-			pick_question += 120;
-		} 
-		if(allUser[user_ind] -> get_current_lv() == 7)
-		{
-			pick_question += 144;
-		}
+		pick_question += (allUser[user_ind] -> get_current_lv() - 1) * 24;
+		
 		
 		std::cout << ques_obj.get_ques(pick_question) << std::endl;
 		std::cout << "A. " << ques_obj.get_option(pick_question, 0) << std::endl; 
