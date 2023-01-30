@@ -1,10 +1,10 @@
-#include<iostream>
-#include<string>
-#include<vector> 
-#include<fstream> // for file input and output
-#include<sstream> // istringstream
-#include <cstdlib> /* about random */
-#include <ctime> /* about time */
+// #include<iostream>
+// #include<string>
+// #include<vector> 
+// #include<fstream> // for file input and output
+// #include<sstream> // istringstream
+// #include <cstdlib> /* about random */
+// #include <ctime> /* about time */
 // #include <conio.h>/* kbhit */
 #include "../hpp/Question.hpp"
 #include "../hpp/User_State.hpp"
@@ -12,7 +12,7 @@
 using namespace std;
 
 int main(){	
-	string dir = "../game_file/user_info.txt";
+	std::string dir = "../game_file/user_info.txt";
 	User** allUser = new User*[MAX_USER_NUM]; // the pointer array to store all users
 	fileInput(dir, allUser);
 	
@@ -40,8 +40,7 @@ int main(){
 	//int index = Login(allUser);
 	intro(allUser); //return; 
 	
-//	if(index != -1)
-//		allUser[index] -> print();
+
 	
 	// output to a file
 	fileOutput(dir, allUser);
