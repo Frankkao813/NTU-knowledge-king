@@ -18,3 +18,8 @@ Note that this repository only contains the CLI version of the game, the full GU
 ### compilation
 In the cpp folder:
 `g++ User_State.cpp Question.cpp main.cpp -o NTU_game`
+
+### further improvement idea
+* construct a new class called  `UserArray` to store the information of `User`
+* remove the global variables in `User_State.cpp` and store the info in respective class.
+* try to separate User and State into separate cpp and h files.
